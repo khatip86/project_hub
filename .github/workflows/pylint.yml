@@ -20,15 +20,13 @@ jobs:
       - name: Install dependencies
         run: pip install pylint
 
-      #- name: Run Pylint
-       # run: pylint --exit-zero main.py
-
-      - name: Check Pylint score
+      - name: Run Pylint and Get Score
         run: |
-          pylint_output=$(pylint --output-format=json main.py)
-          score=$(echo "$pylint_output" | jq -r .[0].global_note)
-          echo "Current Pylint score is: $score"
-      
+          score=$(pylint --output-format=json $(git ls-tree -r --name-only main | grep "\.py$" | xargs) | jq .[0].global_note)
+          echo "Pylint score: $score"
+
+      - name: Check Pylint score (optional)
+        run: |
           if (( $(echo "$score >= 8.5" | bc -l) )); then
             echo "Проверка прошла успешно!"
           else
