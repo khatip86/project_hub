@@ -27,7 +27,7 @@ jobs:
 
       - name: Check Pylint score (optional)
         run: |
-          if (( $(echo "$score >= 8.5" | bc -l) )); then
+          if (( $(bc <<< "$score >= 8.5") )); then
             echo "Проверка прошла успешно!"
           else
             echo "Пересмотрите код..."
