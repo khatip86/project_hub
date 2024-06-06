@@ -38,11 +38,12 @@ jobs:
         score=$(find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1)
         echo "Pylint score: $score"
 
-    - name: Check score and comment
+    - name: Запуск Pylint
       run: |
-        if (( $(echo "$score >= 8.5" | bc) )); then
+        if (( $(echo "$score >= 8.5" | bc -l) )); then
           echo "Код успешно прошел проверку!"
         else
           echo "Необходимо пересмотреть код."
           exit 1
         fi
+
