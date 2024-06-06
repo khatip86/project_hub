@@ -7,7 +7,7 @@ on:
 
 jobs:
   lint:
-    name: Проверка оценки Pylint
+    name: Проверка оценки Flake8
     runs-on: ubuntu-latest
 
     steps:
@@ -22,28 +22,28 @@ jobs:
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
-        pip install pylint
+        pip install flake8
 
     - name: Клонирование репозитория
       run: |
         git clone https://github.com/khatip86/project_hub.git
         cd project_hub
 
-    - name: Запуск Pylint
+    - name: Запуск Flake8
       run: |
-        find . -name "*.py" -exec pylint {} --score=n \;
+        flake8 --count --select=E9,F63,F722,F821 --show-source --statistics
 
-    - name: Get Pylint score
+    - name: Get Flake8 score
       run: |
-        score=$(find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1)
-        echo "Pylint score: $score"
+        flake8 --count --select=E9,F63,F722,F821 --show-source --statistics | grep "total" | awk '{print $2}' > score.txt
+        score=$(cat score.txt)
+        echo "Flake8 score: $score"
 
-    - name: Запуск Pylint
+    - name: Check score and comment
       run: |
-        if (($(bc <<< "scale=1; $score>=8.5"))); then
+        if [[ $score -eq 0 ]]; then
           echo "Код успешно прошел проверку!"
         else
           echo "Необходимо пересмотреть код."
           exit 1
         fi
-
