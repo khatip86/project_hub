@@ -24,12 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
 
-    - name: Клонирование репозитория
-      run: |
-        git clone https://github.com/khatip86/project_hub.git
-        cd project_hub
-
     - name: Запуск Pylint
       run: |
-        pylint_score=$(find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1)
+        pylint_score=$(pylint "Plan B"/control/control.py --score=n)
         echo "Pylint score: $pylint_score"
