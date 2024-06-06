@@ -31,14 +31,5 @@ jobs:
 
     - name: Запуск Pylint
       run: |
-        find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1 > pylint_score.txt
-
-    - name: Получение оценки Pylint
-      run: |
-    
-    - name: Получение оценки Pylint
-      run: |
-        pylint_score=$(cat pylint_score.txt)
+        pylint_score=$(find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1)
         echo "Pylint score: $pylint_score"
-        echo "Pylint score: $(echo "$pylint_score >= 8.5" | bc)"
-
