@@ -1,27 +1,26 @@
-name: Проверка кода
+name: Pylint
 
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
-  lint:
-    name: Проверка оценки Pylint
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
     steps:
-      - name: Checkout репозитория
-        uses: actions/checkout@v2
-      - name: Установка Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.12'
-      - name: Установка зависимостей
-        run: |
-          python -m pip install --upgrade pip
-          pip install pylint PySide6
-      - name: Запуск Pylint
-        run: |
-          set -x  # Включаем отладочный режим
-          pylint_score=$(pylint src/app/main.py --score=n -d ./)
-          echo "Pylint score: $pylint_score"
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pylint
+    - name: Analysing the code with pylint
+      run: |
+        pylint $(git ls-files '*.py')
