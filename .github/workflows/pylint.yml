@@ -40,7 +40,7 @@ jobs:
 
     - name: Проверка оценки Pylint
       run: |
-        if (( $(bc <<< "$pylint_score >= 8.5") )); then
+        if (( $(bc <<< "$pylint_score + 0 >= 8.5") )); then
           echo "Код успешно прошел проверку!"
         else
           echo "Необходимо пересмотреть код."
