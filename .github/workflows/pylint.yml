@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: Checkout репозитория
       uses: actions/checkout@v2
-      
+
     - name: Установка Python
       uses: actions/setup-python@v2
       with:
@@ -31,4 +31,18 @@ jobs:
 
     - name: Запуск Pylint
       run: |
-        find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1
+        find . -name "*.py" -exec pylint {} --score=n \;
+
+    - name: Get Pylint score
+      run: |
+        score=$(find . -name "*.py" -exec pylint {} --score=n \; | cut -d" " -f2 | sort -nr | head -1)
+        echo "Pylint score: $score"
+
+    - name: Check score and comment
+      run: |
+        if (( $(echo "$score >= 8.5" | bc) )); then
+          echo "Код успешно прошел проверку!"
+        else
+          echo "Необходимо пересмотреть код."
+          exit 1
+        fi
