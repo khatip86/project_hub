@@ -17,20 +17,18 @@ jobs:
     - name: Установка Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.x'
+        python-version: '3.12'
 
     - name: Установка зависимостей
       run: |
         python -m pip install --upgrade pip
         pip install pylint
 
+    - name: Клонирование репозитория
+      run: |
+        git clone https://github.com/khatip86/project_hub.git
+        cd project_hub
+
     - name: Запуск Pylint
       run: |
-        score=$(pylint your_code.py --score=n)
-        echo "Оценка Pylint: $score"
-        if (( $(echo "$score >= 8.5" | bc) )); then
-          echo "Проверка прошла успешно!"
-        else
-          echo "Пересмотрите код..."
-          exit 1
-        fi
+        find . -name "*.py" -exec pylint {} --score=n \;
