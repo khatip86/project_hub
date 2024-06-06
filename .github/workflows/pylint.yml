@@ -26,5 +26,6 @@ jobs:
 
     - name: Запуск Pylint
       run: |
+        set -x
         pylint_score=$(pylint control.py --score=n)
         echo "Pylint score: $pylint_score"
