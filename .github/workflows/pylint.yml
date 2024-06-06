@@ -24,4 +24,4 @@ jobs:
 
     - name: Run Pylint
       run: |
-        pylint --score>=8.5 main.py # параметр score=y позволяет выставлять ограничения на оценку кода
+        pylint --score=y main.py # параметр score=y позволяет выставлять ограничения на оценку кода
