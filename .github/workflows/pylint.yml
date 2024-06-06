@@ -22,8 +22,7 @@ jobs:
 
       - name: Run Pylint and Get Score
         run: |
-          pylint --output-format=parseable $(find . -name "*.py") | awk '{print $NF}' | awk -F':' '{print $2}' | awk -F'=' '{print $2}' > score.txt
-          score=$(cat score.txt)
+          score=$(pylint --output-format=json $(git ls-tree -r --name-only main | grep "\.py$" | xargs) | jq .[0].global_note)
           echo "Pylint score: $score"
 
       - name: Check Pylint score (optional)
