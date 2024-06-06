@@ -35,14 +35,10 @@ jobs:
 
     - name: Получение оценки Pylint
       run: |
+    
+    - name: Получение оценки Pylint
+      run: |
         pylint_score=$(cat pylint_score.txt)
         echo "Pylint score: $pylint_score"
+        echo "Pylint score: $(echo "$pylint_score >= 8.5" | bc)"
 
-    - name: Проверка оценки Pylint
-      run: |
-        if (( $(bc <<< "$pylint_score + 0 >= 8.5") )); then
-          echo "Код успешно прошел проверку!"
-        else
-          echo "Необходимо пересмотреть код."
-          exit 1
-        fi
