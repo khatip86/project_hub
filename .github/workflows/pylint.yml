@@ -25,10 +25,13 @@ jobs:
 
       - name: Check Pylint score
         run: |
-          git ls-tree -r --name-only main | grep "\.py$" | xargs pylint
+          pylint_output=$(pylint --output-format=json main.py)
+          score=$(echo "$pylint_output" | jq -r .[0].global_note)
+          echo "Current Pylint score is: $score"
+      
           if (( $(echo "$score >= 8.5" | bc -l) )); then
-            echo "Код удовлетворяет условиям"
+            echo "Проверка прошла успешно!"
           else
-            echo "Стоит пересмотреть код..."
+            echo "Пересмотрите код..."
             exit 1
           fi
